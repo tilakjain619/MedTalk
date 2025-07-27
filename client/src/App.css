@@ -1,0 +1,37 @@
+@import url('https://fonts.googleapis.com/css2?family=Cascadia+Code:ital,wght@0,200..700;1,200..700&family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap');
+@import "tailwindcss";
+body{
+    font-family: 'Nunito Sans', sans-serif;
+    background-color: #2e3746;
+    color: #f9f9f9;
+}
+*{
+    scroll-behavior: smooth;
+}
+
+/* Global scrollbar styles */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #d4d4d8 #fefefe; /* thumb & track (light gray on white) */
+}
+
+/* WebKit browsers */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #fefefe; /* subtle white track */
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #d4d4d8; /* zinc-300 */
+  border-radius: 6px;
+  border: 2px solid #fefefe;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #a1a1aa; /* zinc-500 on hover */
+}
