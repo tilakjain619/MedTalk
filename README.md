@@ -1,42 +1,95 @@
 # MedTalk
 
-MedTalk is a smart healthcare app that lets users upload prescriptions and get simplified medical insights through AI-powered chat. It helps patients understand medicines, usage instructions, and provides contextual responses based on uploaded content.
+MedTalk is an AI-powered healthcare assistant that helps users understand their prescriptions. Upload a prescription image, and MedTalk extracts medicine details, provides a summary, and enables a conversational chat to answer follow-up questions in simple language.
+
+---
 
 ## Features
 
-- Upload prescription images
-- OCR-powered extraction of medicine details
-- AI chat for follow-up questions
-- Summary of Prescription
-- Responsive design with Tailwind CSS
+- **Upload Prescription Images:** Snap or upload a photo of your prescription.
+- **OCR Extraction:** Automatically reads and extracts medicine names and instructions.
+- **AI Chat:** Ask questions about your medicines, usage, side effects, and more.
+- **Prescription Summary:** Get a concise, patient-friendly summary of your prescription.
+- **Responsive UI:** Built with Tailwind CSS for a seamless experience on any device.
+
+---
 
 ## Tech Stack
 
-- React + Tailwind CSS (Frontend)
-- Node.js + Express (Backend)
-- OCR integration via Puter
-- Google Gemma for intelligent chat and summaries
+- **Frontend:** React, Tailwind CSS
+- **Backend:** Node.js, Express
+- **OCR:** Puter.ai
+- **AI:** Google Gemma (for chat and summaries)
 
-## How to Run Locally
+---
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/tilakjain619/MedTalk.git
-   ```
+## Getting Started
 
-2. Navigate to project folders and install dependencies:
-   ```bash
-   cd client
-   npm install
-   cd ../server
-   npm install
-   ```
+### 1. Clone the Repository
 
-3. Start frontend and backend:
-   ```bash
-   cd server
-   node app.js
+```bash
+git clone https://github.com/tilakjain619/MedTalk.git
+cd MedTalk
+```
 
-   cd ../client
-   npm run dev
-   ```
+### 2. Install Dependencies
+
+```bash
+# Install frontend dependencies
+cd client
+npm install
+
+# Install backend dependencies
+cd ../server
+npm install
+```
+
+### 3. Set Up Environment Variables
+
+- Create a `.env` file in both `client` and `server` folders as needed.
+- For example, in `client/.env`:
+  ```
+  VITE_BACKEND_URL=http://localhost:5000
+  ```
+- In `server/.env`, add your Openrouter API key:
+```
+OPENROUTER_API_KEY=your_api_key
+```
+
+### 4. Start the Application
+
+```bash
+# Start backend
+cd server
+node app.js
+
+# In a new terminal, start frontend
+cd ../client
+npm run dev
+```
+
+- The frontend will run on [http://localhost:5173](http://localhost:5173) (or as specified by Vite).
+- The backend will run on [http://localhost:5000](http://localhost:5000).
+
+---
+
+## Usage
+
+1. Upload a prescription image on the main page.
+2. Wait for the app to extract and summarize the prescription.
+3. Use the chat to ask questions like:
+   - "What is this medicine for?"
+   - "Are there any side effects?"
+   - "How should I take these medicines?"
+
+---
+
+## Contributing
+
+Pull requests are welcome! For major changes, please open an issue first to discuss what you would like to change.
+
+---
+
+## Contact
+
+For questions or support, contact [@tilakjain619](https://github.com/tilakjain619).

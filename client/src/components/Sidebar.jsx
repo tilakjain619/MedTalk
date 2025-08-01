@@ -8,7 +8,7 @@ const Sidebar = ({ speak, setSpeak }) => {
     setSpeak(!speak);
   }
   return (
-    <div className='flex sm:flex-col sm:border sm:rounded-3xl sm:border-gray-600 py-2 sm:py-0 sm:bg-gray-800 sm:h-full gap-3 sm:gap-0 bg-gray-900 rounded-full shadow-lg'>
+    <div className='flex sm:flex-col sm:border sm:rounded-3xl sm:border-gray-600 py-2 sm:py-0 sm:bg-gray-800 sm:h-full gap-0 sm:gap-0 bg-gray-900 rounded-full shadow-lg'>
       <div onClick={handlePageReload} className='cursor-pointer hover:bg-gray-700 px-5 py-3 sm:py-4 rounded-3xl'>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width={20} height={20} color={"#ffffff"} fill={"none"}>
           <path d="M20.5 5.5H9.5C5.78672 5.5 3 8.18503 3 12" stroke="#ffffff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path>

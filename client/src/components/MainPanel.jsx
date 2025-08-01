@@ -44,7 +44,7 @@ const MainPanel = ({ speak, chatHistory, setChatHistory }) => {
     }
     return (
         <div className='sm:w-[60%] md:w-[70%] mb-14 sm:mb-0 sm:border sm:rounded-3xl sm:p-4 md:p-8 sm:border-gray-600 sm:bg-gray-800 '>
-            <div>
+            <div className='mt-3 sm:mt-0'>
                 {
                     !imageData || medicationInsights.length <= 0 ? (
                         <>
@@ -64,17 +64,17 @@ const MainPanel = ({ speak, chatHistory, setChatHistory }) => {
                     )
                 :
                 <div>
-                    <h2 className='text-2xl text-blue-600'>MedTalk</h2>
+                    <h2 className='text-2xl mt-3 sm:mt-0 text-blue-500'>MedTalk</h2>
                     </div>}
 
                 {imageData && medicationInsights.length <= 0 && (
-                    <div className='grid gap-2 justify-center'>
-                        <img src={imageData} alt="Preview" className='w-2/4 mx-auto mt-2' />
+                    <div className='grid gap-2 mt-2 justify-center'>
+                        <img src={imageData} alt="Preview" className='w-3/5 rounded-lg sm:rounded-xl mx-auto mt-2' />
                         <button onClick={handleAnalyseImage} className={`bg-blue-600 mx-auto w-fit text-white px-5 cursor-pointer hover:bg-blue-700 py-1.5 rounded-full ${insightsLoading && 'animate-pulse'}`}>Submit</button>
                     </div>
                 )}
             </div>
-            <div className='mt-3 overflow-y-auto mb-4 sm:h-[75vh]'>
+            <div className='mt-3 overflow-y-auto mb-4 sm:h-[85vh]'>
                 <Markdown
                     remarkPlugins={[remarkGfm]}
                     components={{
@@ -87,7 +87,7 @@ const MainPanel = ({ speak, chatHistory, setChatHistory }) => {
                         p: ({ node, ...props }) => <p className="text-md my-2" {...props} />,
                     }}
                 >
-                    {medicationInsights || "Please upload a prescription."}
+                    {medicationInsights || imageData ? medicationInsights : "Please upload a prescription to get insights."}
                 </Markdown>
             </div>
         </div>

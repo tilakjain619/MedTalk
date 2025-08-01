@@ -6,6 +6,15 @@ import Markdown from 'react-markdown'
 import { useEffect } from 'react';
 import { useState } from 'react';
 
+const TypingLoader = () => (
+  <span className="inline-flex gap-1 items-center">
+    Typing
+    <span className="animate-bounce">.</span>
+    <span className="animate-bounce delay-300">.</span>
+    <span className="animate-bounce delay-600">.</span>
+  </span>
+);
+
 const Chat = ({ chatHistory, setChatHistory }) => {
   const [showChat, setShowChat] = useState(window.innerWidth >= 640);
   const [chatLoading, setChatLoading] = useState(false);
@@ -25,8 +34,8 @@ const Chat = ({ chatHistory, setChatHistory }) => {
   const handleShowChat = () => {
     setShowChat(!showChat);
   }
-  const handleSendMessage = async () => {
-    const trimmedInput = chatInput.trim();
+  const handleSendMessage = async (input) => {
+    const trimmedInput = (input ?? chatInput).trim();
     if (!trimmedInput) return;
 
     // Extract summary from chatHistory
@@ -39,18 +48,25 @@ const Chat = ({ chatHistory, setChatHistory }) => {
 
     try {
       setChatLoading(true);
+      // Show "Typing..." message while waiting for response
+      setChatHistory([...updatedHistory, { ai: "typing-loader", temp: true }]);
       const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/chat`, {
         history: updatedHistory,
         question: `Prescription Summary:\n${summaryText}\n\nUser Query: ${trimmedInput}`
       });
-
+      // Remove the temporary "Typing..." message before adding the real response
+      setChatHistory(prev =>
+        prev
+          .filter(msg => !msg.temp)
+          .concat({ ai: response.data.answer || response.data.response || response })
+      );
       const ans = response.data.answer || response.data.response || response;
       setChatHistory([...updatedHistory, { ai: ans }]);
     } catch (error) {
       console.error('Error in chat:', error);
       setChatHistory([...updatedHistory, { ai: "Error: Please try again." }]);
     }
-    finally{
+    finally {
       setChatLoading(false);
     }
   };
@@ -64,6 +80,10 @@ const Chat = ({ chatHistory, setChatHistory }) => {
       chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
     }
   }, [chatHistory, showChat]);
+
+  // Determine which empty state message to show
+  const showUploadMsg = !chatHistory.some((msg) => msg.summary);
+  const showStartMsg = !showUploadMsg && !chatHistory.some((msg) => msg.user);
 
   return (
     <div className="fixed bottom-0 right-0 w-full rounded-t-3xl sm:rounded-3xl sm:py-3 sm:px-3 md:px-4 bg-gray-900 sm:bg-gray-800 shadow-2xl sm:static sm:w-[40%] md:w-[30%] sm:shadow-none sm:border sm:border-gray-600">
@@ -82,22 +102,57 @@ const Chat = ({ chatHistory, setChatHistory }) => {
         </span>
       </div>
       <div
-        className={`overflow-hidden transition-all sm:h-full duration-300 ease-in-out ${showChat ? "max-h-[500px] sm:max-h-[87vh] sm:h-full opacity-100" : "max-h-0 opacity-0"}`}
+        className={`overflow-hidden transition-all sm:h-full duration-300 ease-in-out ${showChat ? "max-h-[500px] sm:max-h-[88vh] sm:h-full opacity-100" : "max-h-0 opacity-0"}`}
       >
         <div className="py-4 px-2 relative">
-          <div className="h-64 overflow-y-auto mb-4 sm:min-h-[76vh]" ref={chatContainerRef}>
+          <div className="h-64 overflow-y-auto mb-4 sm:min-h-[72vh]" ref={chatContainerRef}>
             <div className="relative z-10 p-4 rounded-lg">
               {chatHistory.map((message, index) => (
                 <div key={index} className="mb-2">
                   {message.user && <div className='text-right w-full grid justify-items-end justify-end'><p className="bg-gray-700 w-fit rounded-lg px-4 py-3">{message.user}</p></div>}
-                  {message.ai && <div className='bg-blue-600/50 bg-o px-4 py-3 rounded-lg max-w-[80%]'><Markdown remarkPlugins={[remarkGfm]}>{message.ai}</Markdown></div>}
+                  {message.ai && (
+                    <div className='bg-blue-600/50 bg-o px-4 py-3 rounded-lg max-w-[80%]'>
+                      {message.ai === "typing-loader" ? (
+                        <TypingLoader />
+                      ) : (
+                        <Markdown remarkPlugins={[remarkGfm]}>{message.ai}</Markdown>
+                      )}
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
           </div>
-          {!chatHistory.some((msg) => msg.summary) && (
+          {showUploadMsg && (
             <small className="text-center absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] text-zinc-500 w-full block">Please first upload a prescription</small>
           )}
+          {showStartMsg && (
+            <small className="text-center text-[15px] absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] text-zinc-500 w-full block">Start a conversation</small>
+          )}
+          {/* Quick Questions */}
+          {
+            chatHistory.some((msg) => msg.summary) && (
+              <div className="mb-2 flex gap-2 overflow-x-auto sm:no-scrollbar">
+                {[
+                  "What is this medicine for?",
+                  "Are there any side effects?",
+                  "How should I take these medicines?",
+                  "Can I take these with food?",
+                  "What should I avoid while on this prescription?"
+                ].map((q, i) => (
+                  <button
+                    key={i}
+                    type="button"
+                    className="bg-gray-700 text-white text-nowrap cursor-pointer px-3 py-1 rounded-full text-xs sm:text-sm md:text-md hover:bg-blue-800 transition"
+                    onClick={() => handleSendMessage(q)}
+                  >
+                    {q}
+                  </button>
+                ))}
+              </div>
+            )
+          }
+          {/* End Quick Questions */}
           <div className="flex items-center gap-2 mt-2">
             <input
               autoComplete="off"
@@ -110,7 +165,7 @@ const Chat = ({ chatHistory, setChatHistory }) => {
             />
             <button
               disabled={!chatHistory.some((msg) => msg.summary)}
-              onClick={handleSendMessage}
+              onClick={() => handleSendMessage()}
               className={`bg-blue-600 cursor-pointer disabled:cursor-not-allowed disabled:opacity-65 w-1/5 text-white px-4 py-2 rounded-3xl ${chatLoading ? 'animate-pulse' : ''}`}
             >
               Ask
