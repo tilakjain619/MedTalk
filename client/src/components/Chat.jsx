@@ -5,6 +5,7 @@ import remarkGfm from 'remark-gfm'
 import Markdown from 'react-markdown'
 import { useEffect } from 'react';
 import { useState } from 'react';
+import { ShineBorder } from './magicui/shine-border';
 
 const TypingLoader = () => (
   <span className="inline-flex gap-1 items-center">
@@ -102,7 +103,7 @@ const Chat = ({ chatHistory, setChatHistory }) => {
         </span>
       </div>
       <div
-        className={`overflow-hidden transition-all sm:h-full duration-300 ease-in-out ${showChat ? "max-h-[500px] sm:max-h-[88vh] sm:h-full opacity-100" : "max-h-0 opacity-0"}`}
+        className={`overflow-hidden transition-all sm:h-full duration-300 ease-in-out ${showChat ? "max-h-[500px] sm:max-h-[87vh] sm:h-full opacity-100" : "max-h-0 opacity-0"}`}
       >
         <div className="py-4 px-2 relative">
           <div className="h-64 overflow-y-auto mb-4 sm:min-h-[72vh]" ref={chatContainerRef}>
@@ -124,7 +125,16 @@ const Chat = ({ chatHistory, setChatHistory }) => {
             </div>
           </div>
           {showUploadMsg && (
-            <small className="text-center absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] text-zinc-500 w-full block">Please first upload a prescription</small>
+            <div className="text-center absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] bg-gray-800 sm:bg-gray-900 text-zinc-500 w-[90%] block rounded-lg px-5 py-3 sm:px-6 sm:py-5">
+              <ShineBorder shineColor={["#A07CFE", "#FE8FB5", "#FFBE7B"]} />
+              <p className="text-lg font-semibold text-zinc-200">MedTalk Chat Features</p>
+
+              <ul className="text-sm mt-1 text-left max-w-md mx-auto list-disc list-inside text-zinc-400 space-y-1">
+                <li><span className="text-zinc-300 font-medium">Real Time Q&A:</span> Ask health queries and get instant, AI-powered responses.</li>
+                <li><span className="text-zinc-300 font-medium">Contextual Chat:</span> Stay within your diagnosis context while chatting for clarity.</li>
+                <li><span className="text-zinc-300 font-medium">Privacy First Design:</span> Local rendering ensures sensitive data stays yours.</li>
+              </ul>
+            </div>
           )}
           {showStartMsg && (
             <small className="text-center text-[15px] absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] text-zinc-500 w-full block">Start a conversation</small>
@@ -132,7 +142,7 @@ const Chat = ({ chatHistory, setChatHistory }) => {
           {/* Quick Questions */}
           {
             chatHistory.some((msg) => msg.summary) && (
-              <div className="mb-2 flex gap-2 overflow-x-auto sm:no-scrollbar">
+              <div className="mb-2 flex gap-2 overflow-x-auto no-scrollbar">
                 {[
                   "What is this medicine for?",
                   "Are there any side effects?",

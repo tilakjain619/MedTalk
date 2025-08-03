@@ -52,9 +52,9 @@ npm install
   VITE_BACKEND_URL=http://localhost:5000
   ```
 - In `server/.env`, add your Openrouter API key:
-```
-OPENROUTER_API_KEY=your_api_key
-```
+  ```
+  OPENROUTER_API_KEY=your_api_key
+  ```
 
 ### 4. Start the Application
 
@@ -67,9 +67,6 @@ node app.js
 cd ../client
 npm run dev
 ```
-
-- The frontend will run on [http://localhost:5173](http://localhost:5173) (or as specified by Vite).
-- The backend will run on [http://localhost:5000](http://localhost:5000).
 
 ---
 
