@@ -1,23 +1,18 @@
-import React from 'react'
 import './App.css'
-import Sidebar from './components/Sidebar'
-import MainPanel from './components/MainPanel'
-import Chat from './components/Chat'
-import { useState } from 'react'
+import {BrowserRouter, Routes, Route} from 'react-router-dom'
+import Home from './pages/Home'
+import Landing from './pages/Landing'
 
 const App = () => {
-  const [chatHistory, setChatHistory] = useState([]);
-  const [speak, setSpeak] = useState(false);
   return (
-    <div className='sm:flex sm:gap-2 px-3 py-2'>
-      <div className='sm:w-[9%] md:w-[4%]'>
-        <Sidebar speak={speak} setSpeak={setSpeak} chatHistory={chatHistory} setChatHistory={setChatHistory}/>
-      </div>
-      <div className='sm:flex sm:gap-2 sm:w-[90%] md:w-[95%] justify-between'>
-        <MainPanel speak={speak} chatHistory={chatHistory} setChatHistory={setChatHistory}/>
-        <Chat speak={speak} chatHistory={chatHistory} setChatHistory={setChatHistory}/>
-      </div>
-    </div>
+    <>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/home" element={<Home />} />
+          <Route path="/" element={<Landing />} />
+        </Routes>
+      </BrowserRouter>
+    </>
   )
 }
 

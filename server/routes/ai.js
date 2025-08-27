@@ -58,4 +58,33 @@ router.post("/chat", async (req, res) => {
     }
 });
 
+router.post('/verify', async (req, res) => {
+    const { medicineSummary, medicineText } = req.body;
+
+    if (!medicineSummary || !medicineText) {
+        return res.status(400).json({ error: 'Missing required fields' });
+    }
+
+    const prompt = [
+        {
+            role: "user",
+            content: [
+                {
+                    type: "text",
+                    text: `You are a concise medical assistant. Verify the medicine information against the prescription summary. Prescription summary: ${medicineSummary}. Medicine text: ${medicineText}. Respond with either "Confirmed" or "Not Matching", followed by one line explaining why. Output must be plain text only. Do not use Markdown.`
+                }
+
+            ]
+        }
+    ];
+
+    try {
+        const result = await askGemma(prompt);
+        res.json({ summary: result });
+    } catch (error) {
+        console.error('Error verifying medicine:', error);
+        res.status(500).json({ error: 'Failed to verify the medicine' });
+    }
+});
+
 export default router;

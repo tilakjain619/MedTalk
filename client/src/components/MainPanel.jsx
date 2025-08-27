@@ -1,14 +1,25 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import remarkGfm from 'remark-gfm'
 import Markdown from 'react-markdown'
 import axios from 'axios'
 import { ShineBorder } from './magicui/shine-border';
+import VerifyMedicinePopup from './VerifyMedicinePopup';
 
 
 const MainPanel = ({ speak, chatHistory, setChatHistory }) => {
     const [imageData, setImageData] = useState(null);
     const [medicationInsights, setMedicationInsights] = useState("");
     const [insightsLoading, setInsightsLoading] = useState(false);
+    const [showVerifyMedicinePopup, setShowVerifyMedicinePopup] = useState(false);
+
+    // Extract summary from chatHistory when component mounts or chatHistory changes
+    useEffect(() => {
+        const summaryObj = chatHistory.find(msg => msg.summary);
+        if (summaryObj) {
+            setMedicationInsights(summaryObj.summary);
+        }
+    }, [chatHistory]);
+
     const handleImageUpload = (event) => {
         const file = event.target.files[0];
         if (file) {
@@ -43,14 +54,31 @@ const MainPanel = ({ speak, chatHistory, setChatHistory }) => {
             setInsightsLoading(false);
         }
     }
+
+    // Get the current summary from chatHistory
+    const currentSummary = chatHistory.find(msg => msg.summary)?.summary || medicationInsights;
+
+    // Check if prescription is already in localStorage
+    const isPrescriptionInLocalStorage = (() => {
+        const stored = localStorage.getItem('medtalk-chat-history');
+        if (!stored) return false;
+        try {
+            const parsed = JSON.parse(stored);
+            return Array.isArray(parsed) && parsed.some(msg => msg.summary && msg.summary.length > 0);
+        } catch {
+            return false;
+        }
+    })();
+
     return (
-        <div className='sm:w-[60%] md:w-[70%] mb-14 sm:mb-0 sm:border sm:rounded-3xl sm:p-4 md:p-8 sm:border-gray-600 sm:bg-gray-800 '>
+        <>
+        <div className={`sm:w-[60%] md:w-[70%] mb-14 sm:mb-0 sm:border sm:rounded-3xl sm:p-4 md:p-8 sm:border-gray-600 sm:bg-gray-800 ${showVerifyMedicinePopup && 'blur-xs opacity-50 pointer-events-none'}`}>
             <div className='mb-4'>
                 <h2 className='text-2xl mt-3 sm:mt-0 text-blue-500'>MedTalk</h2>
             </div>
             <div className='mt-3 sm:mt-0'>
                 {
-                    (!imageData || medicationInsights.length <= 0) && (
+                    (!medicationInsights || !imageData || currentSummary.length <= 0) && !isPrescriptionInLocalStorage && (
                         <>
                             <label htmlFor="file" className="block mb-2 text-lg font-semibold text-blue-400">
                                 Upload a Prescription
@@ -67,16 +95,16 @@ const MainPanel = ({ speak, chatHistory, setChatHistory }) => {
                         </>
                     )
                 }
-                {imageData && medicationInsights.length <= 0 && (
+                {imageData && currentSummary.length <= 0 && !isPrescriptionInLocalStorage && (
                     <div className='grid gap-2 mt-2 justify-center'>
                         <img src={imageData} alt="Preview" className='w-3/5 rounded-lg sm:rounded-xl mx-auto mt-2' />
                         <button onClick={handleAnalyseImage} className={`bg-blue-600 mx-auto w-fit text-white px-5 cursor-pointer hover:bg-blue-700 py-1.5 rounded-full ${insightsLoading && 'animate-pulse'}`}>{insightsLoading ? 'Analyzing...' : 'Analyze'}</button>
                     </div>
                 )}
             </div>
-            <div className='mt-3 relative overflow-y-auto mb-4 h-[70vh] sm:h-[83vh]'>
+            <div className='mt-3 relative overflow-y-auto mb-4 h-[70vh] sm:h-[78vh]'>
 
-                {medicationInsights.length > 0 ? (
+                {currentSummary.length > 0 ? (
                     <Markdown
                         remarkPlugins={[remarkGfm]}
                         components={{
@@ -89,7 +117,7 @@ const MainPanel = ({ speak, chatHistory, setChatHistory }) => {
                             p: ({ node, ...props }) => <p className="text-md my-2" {...props} />,
                         }}
                     >
-                        {(typeof medicationInsights === "string" ? medicationInsights : JSON.stringify(medicationInsights)).trim()}
+                        {(typeof currentSummary === "string" ? currentSummary : JSON.stringify(currentSummary)).trim()}
                     </Markdown>
                 ) : (
                     <div className="text-center absolute top-[50%] sm:top-[40%] left-[50%] translate-x-[-50%] translate-y-[-50%] bg-gray-800 sm:bg-gray-900 text-zinc-400 w-[90%] sm:w-[80%] md:w-[65%] lg:w-[50%] block rounded-lg px-5 py-4 sm:px-8 sm:py-6">
@@ -118,7 +146,18 @@ const MainPanel = ({ speak, chatHistory, setChatHistory }) => {
 
                 )}
             </div>
+            {/* Verify medicine section */}
+            {
+                currentSummary && currentSummary.length > 0 && currentSummary !== "Error analyzing the prescription. Please try again." &&
+                <div className='my-4'>
+                    <button onClick={() => setShowVerifyMedicinePopup(true)} className='bg-blue-600 text-white px-5 py-2 rounded-full cursor-pointer hover:bg-blue-700'>Verify medicines</button>
+                </div>
+            }
         </div>
+            {showVerifyMedicinePopup && (
+                <VerifyMedicinePopup setShowVerifyMedicinePopup={setShowVerifyMedicinePopup} medicineSummary={currentSummary} speak={speak} />
+            )}
+            </>
     )
 }
 

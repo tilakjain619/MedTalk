@@ -10,6 +10,7 @@ MedTalk is an AI-powered healthcare assistant that helps users understand their 
 - **OCR Extraction:** Automatically reads and extracts medicine names and instructions.
 - **AI Chat:** Ask questions about your medicines, usage, side effects, and more.
 - **Prescription Summary:** Get a concise, patient-friendly summary of your prescription.
+- **Verify Medicines:** Quickly check if your purchased medicines match the prescription.
 - **Responsive UI:** Built with Tailwind CSS for a seamless experience on any device.
 
 ---
@@ -74,11 +75,11 @@ npm run dev
 
 1. Upload a prescription image on the main page.
 2. Wait for the app to extract and summarize the prescription.
-3. Use the chat to ask questions like:
+3. Use the chat to ask follow-up questions like:
    - "What is this medicine for?"
    - "Are there any side effects?"
    - "How should I take these medicines?"
-
+4. Use the **Verify medicines** feature to quickly verify if you have bought the right medicines.
 ---
 
 ## Contributing
