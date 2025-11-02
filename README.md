@@ -51,9 +51,13 @@ npm install
   ```
   VITE_BACKEND_URL=http://localhost:5000
   ```
-- In `server/.env`, add your Openrouter API key:
+- In `server/.env`, add your Openrouter API key and redis credentials:
   ```
   OPENROUTER_API_KEY=your_api_key
+  REDIS_HOST=your_redis_host
+  REDIS_PORT=redis_port  
+  REDIS_USERNAME=default  
+  REDIS_PASSWORD=your_redis_password
   ```
 
 ### 4. Start the Application
