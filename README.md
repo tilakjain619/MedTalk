@@ -2,8 +2,6 @@
 
 MedTalk is an AI-powered healthcare assistant that helps users understand their prescriptions. Upload a prescription image, and MedTalk extracts medicine details, provides a summary, and enables a conversational chat to answer follow-up questions in simple language.
 
----
-
 ## Features
 
 - **Upload Prescription Images:** Snap or upload a photo of your prescription.
@@ -13,7 +11,6 @@ MedTalk is an AI-powered healthcare assistant that helps users understand their 
 - **Verify Medicines:** Quickly check if your purchased medicines match the prescription.
 - **Responsive UI:** Built with Tailwind CSS for a seamless experience on any device.
 
----
 
 ## Tech Stack
 
@@ -22,7 +19,9 @@ MedTalk is an AI-powered healthcare assistant that helps users understand their 
 - **OCR:** Puter.ai
 - **AI:** Google Gemma (for chat and summaries)
 
----
+## Architecture
+
+![Basic Architecture](./public/basic_architecture.png)
 
 ## Getting Started
 
@@ -82,11 +81,6 @@ npm run dev
 4. Use the **Verify medicines** feature to quickly verify if you have bought the right medicines.
 ---
 
-## Contributing
-
-Pull requests are welcome! For major changes, please open an issue first to discuss what you would like to change.
-
----
 
 ## Contact
 

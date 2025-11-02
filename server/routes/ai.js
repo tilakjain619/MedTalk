@@ -1,10 +1,29 @@
 import express from 'express';
-import { askGemma } from '../utils/openrouter.js'; // this will use gemini now!
+import { askGemma } from '../utils/openrouter.js';
+// redis client
+import client from '../utils/client.js';
 
 const router = express.Router();
 
 router.post('/upload', async (req, res) => {
     try {
+        const rateLimitKey = `summary_rate_limit:${req.ip}`;
+        const current = await client.get(rateLimitKey);
+
+        if (current && parseInt(current) >= 3) {
+            return res.status(429).json({ error: 'Rate limit exceeded. Please try again later.' });
+        }
+
+        await client.incr(rateLimitKey);
+        await client.expire(rateLimitKey, 60 * 5); // 5 minutes
+
+        // Delete all chat-related keys
+        const keys = await client.keys('chat:*');
+        if (keys.length > 0) {
+            await client.del(keys);
+            console.log(`Deleted ${keys.length} chat keys`);
+        }
+
         const { prescriptionText } = req.body;
         if (!prescriptionText) {
             return res.status(400).json({ error: 'No prescription text provided' });
@@ -34,24 +53,26 @@ router.post('/upload', async (req, res) => {
 router.post("/chat", async (req, res) => {
     const { history, question } = req.body;
 
-    const prompt = [
-        {
-            role: "system",
-            content:
-                "You are a medical assistant. Based on the following prescription summary, answer the user's question in simple language. Provide clear explanations and avoid technical jargon. Don't give extra information or disclaimers.",
-        },
-        {
-            role: "user",
-            content: history,
-        },
-        {
-            role: "user",
-            content: question,
-        },
-    ];
+    const prompt = `
+You are a medical assistant. Based on the following prescription summary, answer the user's question in simple language. Provide clear explanations and avoid technical jargon. Don't give extra information or disclaimers.
+
+Prescription Summary:
+${history}
+
+User Question:
+${question}
+`;
+
 
     try {
+        const chatKey = `chat:${question}`;
+        const cached = await client.get(chatKey);
+        if (cached) {
+            return res.json({ response: cached });
+        }
+
         const reply = await askGemma(prompt);
+        await client.set(chatKey, reply, { EX: 1800 });
         res.json({ response: reply });
     } catch (err) {
         res.status(500).json({ error: "Chat error" });
@@ -79,6 +100,16 @@ router.post('/verify', async (req, res) => {
     ];
 
     try {
+        const rateLimitKey = `verify_rate_limit:${req.ip}`;
+        const current = await client.get(rateLimitKey);
+
+        if (current && parseInt(current) >= 3) {
+            return res.status(429).json({ error: 'Rate limit exceeded. Please try again later.' });
+        }
+
+        await client.incr(rateLimitKey);
+        await client.expire(rateLimitKey, 60 * 5); // 5 minutes
+
         const result = await askGemma(prompt);
         res.json({ summary: result });
     } catch (error) {

@@ -197,7 +197,7 @@ export default function Landing() {
             </div>
             <span className="font-bold text-xl text-gray-100">MedTalk</span>
           </div>
-          <p className="text-gray-300 text-xs">© 2024 MedTalk. All rights reserved.</p>
+          <p className="text-gray-300 text-xs">© 2025 MedTalk. All rights reserved.</p>
         </div>
       </footer>
     </div>

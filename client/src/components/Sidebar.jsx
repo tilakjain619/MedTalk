@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom';
 
 const Sidebar = ({ speak, setSpeak, clearChatHistory }) => {
   const handlePageReload = () => {
@@ -10,6 +11,11 @@ const Sidebar = ({ speak, setSpeak, clearChatHistory }) => {
   }
   return (
     <div className='flex sm:flex-col sm:border sm:rounded-3xl sm:border-gray-600 py-2 sm:py-0 sm:bg-gray-800 sm:h-full gap-0 sm:gap-0 bg-gray-900 rounded-full shadow-lg'>
+      <Link to='/' className='cursor-pointer hover:bg-gray-700 px-5 py-3 sm:py-4 grid items-center justify-center rounded-3xl' role="button" aria-label="Go back" title="Go back">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width={24} height={24} color={"#ffffff"} fill={"none"}>
+          <path d="M11 8.5H10.5V4.69635C10.5 4.31176 10.1882 4 9.80365 4C9.61002 4 9.42513 4.08062 9.29338 4.22252L3.34023 10.6336C3.12154 10.8691 3 11.1786 3 11.5C3 11.8214 3.12154 12.1309 3.34023 12.3664L9.29338 18.7775C9.42513 18.9194 9.61002 19 9.80365 19C10.1882 19 10.5 18.6882 10.5 18.3037V14.5C16.0544 14.5 19.0531 18.5162 19.808 19.6847C19.9326 19.8776 20.1429 20 20.3725 20C20.7191 20 21 19.7191 21 19.3725V18.5C21 12.9772 16.5228 8.5 11 8.5Z" stroke="#ffffff" strokeWidth="1.5" strokeLinejoin="round" />
+        </svg>
+      </Link>
       <div onClick={handlePageReload} className='cursor-pointer hover:bg-gray-700 px-5 py-3 sm:py-4 grid items-center justify-center rounded-3xl' role="button" aria-label="Reload page" title="Reload page">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width={20} height={20} color={"#ffffff"} fill={"none"}>
           <path d="M20.5 5.5H9.5C5.78672 5.5 3 8.18503 3 12" stroke="#ffffff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path>
@@ -29,12 +35,12 @@ const Sidebar = ({ speak, setSpeak, clearChatHistory }) => {
         </svg>
       </div>
       <div role="button" aria-label="Clear chat history" title='Clear chat history' onClick={clearChatHistory} className={`cursor-pointer hover:bg-gray-700 px-5 py-3 grid items-center justify-center sm:py-4 rounded-3xl`}>
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width={24} height={24} color={"#ffffff"} fill={"none"}>
-    <path d="M19.5 5.5L18.8803 15.5251C18.7219 18.0864 18.6428 19.3671 18.0008 20.2879C17.6833 20.7431 17.2747 21.1273 16.8007 21.416C15.8421 22 14.559 22 11.9927 22C9.42312 22 8.1383 22 7.17905 21.4149C6.7048 21.1257 6.296 20.7408 5.97868 20.2848C5.33688 19.3626 5.25945 18.0801 5.10461 15.5152L4.5 5.5" stroke="#ffffff" strokeWidth="1.5" strokeLinecap="round" />
-    <path d="M3 5.5H21M16.0557 5.5L15.3731 4.09173C14.9196 3.15626 14.6928 2.68852 14.3017 2.39681C14.215 2.3321 14.1231 2.27454 14.027 2.2247C13.5939 2 13.0741 2 12.0345 2C10.9688 2 10.436 2 9.99568 2.23412C9.8981 2.28601 9.80498 2.3459 9.71729 2.41317C9.32164 2.7167 9.10063 3.20155 8.65861 4.17126L8.05292 5.5" stroke="#ffffff" strokeWidth="1.5" strokeLinecap="round" />
-    <path d="M9.5 16.5L9.5 10.5" stroke="#141B34" strokeWidth="1.5" strokeLinecap="round" />
-    <path d="M14.5 16.5L14.5 10.5" stroke="#141B34" strokeWidth="1.5" strokeLinecap="round" />
-  </svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width={24} height={24} color={"#ffffff"} fill={"none"}>
+          <path d="M19.5 5.5L18.8803 15.5251C18.7219 18.0864 18.6428 19.3671 18.0008 20.2879C17.6833 20.7431 17.2747 21.1273 16.8007 21.416C15.8421 22 14.559 22 11.9927 22C9.42312 22 8.1383 22 7.17905 21.4149C6.7048 21.1257 6.296 20.7408 5.97868 20.2848C5.33688 19.3626 5.25945 18.0801 5.10461 15.5152L4.5 5.5" stroke="#ffffff" strokeWidth="1.5" strokeLinecap="round" />
+          <path d="M3 5.5H21M16.0557 5.5L15.3731 4.09173C14.9196 3.15626 14.6928 2.68852 14.3017 2.39681C14.215 2.3321 14.1231 2.27454 14.027 2.2247C13.5939 2 13.0741 2 12.0345 2C10.9688 2 10.436 2 9.99568 2.23412C9.8981 2.28601 9.80498 2.3459 9.71729 2.41317C9.32164 2.7167 9.10063 3.20155 8.65861 4.17126L8.05292 5.5" stroke="#ffffff" strokeWidth="1.5" strokeLinecap="round" />
+          <path d="M9.5 16.5L9.5 10.5" stroke="#141B34" strokeWidth="1.5" strokeLinecap="round" />
+          <path d="M14.5 16.5L14.5 10.5" stroke="#141B34" strokeWidth="1.5" strokeLinecap="round" />
+        </svg>
       </div>
     </div>
   )
