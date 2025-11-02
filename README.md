@@ -15,7 +15,7 @@ MedTalk is an AI-powered healthcare assistant that helps users understand their 
 ## Tech Stack
 
 - **Frontend:** React, Tailwind CSS
-- **Backend:** Node.js, Express
+- **Backend:** Node.js, Express, Redis (for caching)
 - **OCR:** Puter.ai
 - **AI:** Google Gemma (for chat and summaries)
 
